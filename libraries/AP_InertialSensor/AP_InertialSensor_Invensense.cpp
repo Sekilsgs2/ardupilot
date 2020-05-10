@@ -740,9 +740,11 @@ void AP_InertialSensor_Invensense::_set_filter_register(void)
 bool AP_InertialSensor_Invensense::_check_whoami(void)
 {
     uint8_t whoami = _register_read(MPUREG_WHOAMI);
+    ::printf("got whoami 0x%x\n", unsigned(whoami));
     switch (whoami) {
     case MPU_WHOAMI_6000:
         _mpu_type = Invensense_MPU6000;
+        ::printf("got to %s(%u)\n", __FILE__, __LINE__);
         return true;
     case MPU_WHOAMI_6500:
         _mpu_type = Invensense_MPU6500;
@@ -770,6 +772,7 @@ bool AP_InertialSensor_Invensense::_check_whoami(void)
     }
     // not a value WHOAMI result
     return false;
+    ::printf("got to %s(%u)\n", __FILE__, __LINE__);
 }
 
 
@@ -785,6 +788,7 @@ bool AP_InertialSensor_Invensense::_hardware_init(void)
     _dev->set_speed(AP_HAL::Device::SPEED_LOW);
 
     if (!_check_whoami()) {
+	::printf("got to %s(%u)\n", __FILE__, __LINE__);
         _dev->get_semaphore()->give();
         return false;
     }
